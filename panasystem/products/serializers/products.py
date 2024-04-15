@@ -30,8 +30,9 @@ class PriceHistorySerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     """Serializer for the Product model."""
 
-    category = CategorySerializer()
-    supplier = SupplierSerializer()
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+    supplier = serializers.PrimaryKeyRelatedField(queryset=Supplier.objects.all())
+    price_history = PriceHistorySerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
@@ -57,19 +58,14 @@ class ProductSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         """Update product."""
 
-        category_data = validated_data.pop('category')
-        category_instance, created = Category.objects.get_or_create(**category_data)
-        instance.category = category_instance
+        instance.category = validated_data.get('category', instance.category)
         instance.code = validated_data.get('code', instance.code)
         instance.name = validated_data.get('name', instance.name)
         public_price = validated_data.get('public_price', instance.public_price)
         wholesale_price = validated_data.get('wholesale_price', None)
         instance.brand = validated_data.get('brand', instance.brand)
         instance.description = validated_data.get('description', instance.description)
-        supplier_data = validated_data.get('supplier')
-        if supplier_data:
-            supplier_instance, created = Supplier.objects.get_or_create(**supplier_data)
-            instance.supplier = supplier_instance
+        instance.supplier = validated_data.get('supplier', instance.supplier)
 
         if public_price != instance.public_price:
             print(wholesale_price)
