@@ -1,1 +1,1 @@
-from .products import CategorySerializer, PriceHistorySerializer, ProductSerializer
+from .products import CategorySerializer, PriceHistorySerializer, ProductSerializer, BrandSerializer

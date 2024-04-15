@@ -4,7 +4,7 @@
 from django.contrib import admin
 
 # Model
-from panasystem.products.models.products import Product, PriceHistory, Category
+from panasystem.products.models.products import Product, PriceHistory, Category, Brand
 
 
 @admin.register(Product)
@@ -37,3 +37,4 @@ class PriceHistoryAdmin(admin.ModelAdmin):
     )
 
 admin.site.register(Category)
+admin.site.register(Brand)

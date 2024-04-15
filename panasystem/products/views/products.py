@@ -2,12 +2,14 @@
 
 # Django REST Framework
 from rest_framework import mixins, viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
 
 # Serializers
-from panasystem.products.serializers import ProductSerializer, PriceHistorySerializer, CategorySerializer
+from panasystem.products.serializers import ProductSerializer, PriceHistorySerializer, CategorySerializer, BrandSerializer
 
 # Models
-from panasystem.products.models import Product, PriceHistory, Category
+from panasystem.products.models import Product, PriceHistory, Category, Brand
 
 
 class ProductViewSet(mixins.CreateModelMixin,
@@ -20,6 +22,9 @@ class ProductViewSet(mixins.CreateModelMixin,
     
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = (DjangoFilterBackend, SearchFilter)
+    filterset_fields = ('category', 'brand', 'supplier')
+    search_fields = ('code', 'name')
 
 
 class CategoryViewSet(mixins.CreateModelMixin,
@@ -32,3 +37,15 @@ class CategoryViewSet(mixins.CreateModelMixin,
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+class BrandViewSet(mixins.CreateModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.RetrieveModelMixin,
+                    mixins.ListModelMixin,
+                    mixins.DestroyModelMixin,
+                    viewsets.GenericViewSet):
+    """Brand view set."""
+
+    queryset = Brand.objects.all()
+    serializer_class = BrandSerializer

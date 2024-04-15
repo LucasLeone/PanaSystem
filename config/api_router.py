@@ -8,7 +8,7 @@ from rest_framework.routers import SimpleRouter
 
 # Views
 from panasystem.users.api.views import UserViewSet
-from panasystem.products.views import ProductViewSet, CategoryViewSet
+from panasystem.products.views import ProductViewSet, CategoryViewSet, BrandViewSet
 from panasystem.suppliers.views import OrderViewSet, SuppliersViewSet
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
@@ -18,6 +18,7 @@ router.register("products", ProductViewSet)
 router.register("categories", CategoryViewSet)
 router.register("orders", OrderViewSet)
 router.register("suppliers", SuppliersViewSet)
+router.register("brands", BrandViewSet)
 
 app_name = "api"
 urlpatterns = router.urls

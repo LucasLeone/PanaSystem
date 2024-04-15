@@ -25,6 +25,25 @@ class Category(PanaderiaModel):
     def __str__(self):
         """Return name."""
         return self.name
+    
+
+class Brand(PanaderiaModel):
+    """Brand model."""
+
+    name = models.CharField(
+        'Nombre',
+        max_length=50
+    )
+    description = models.TextField(
+        'Descripción',
+        max_length=100,
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        """Return name."""
+        return self.name
 
 
 class Product(PanaderiaModel):
@@ -59,11 +78,12 @@ class Product(PanaderiaModel):
         null=True,
         blank=True
     )
-    brand = models.CharField(
-        'Marca',
-        max_length=50,
+    brand = models.ForeignKey(
+        Brand,
         null=True,
-        blank=True
+        blank=True,
+        verbose_name='Marca',
+        on_delete=models.CASCADE
     )
     description = models.TextField(
         'Descripción',

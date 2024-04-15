@@ -4,7 +4,7 @@
 from rest_framework import serializers
 
 # Models
-from panasystem.products.models import Category, Product, PriceHistory
+from panasystem.products.models import Category, Product, PriceHistory, Brand
 from panasystem.suppliers.models import Supplier
 
 # Serializers
@@ -16,6 +16,14 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
+        fields = '__all__'
+
+
+class BrandSerializer(serializers.ModelSerializer):
+    """Serializer for the Brand model."""
+
+    class Meta:
+        model = Brand
         fields = '__all__'
 
 
@@ -32,6 +40,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     supplier = serializers.PrimaryKeyRelatedField(queryset=Supplier.objects.all())
+    brand = serializers.PrimaryKeyRelatedField(queryset=Brand.objects.all())
     price_history = PriceHistorySerializer(many=True, read_only=True)
 
     class Meta:
@@ -41,11 +50,10 @@ class ProductSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Create product."""
 
-        category_data = validated_data.pop('category')
-        supplier_data = validated_data.pop('supplier')
-        category = Category.objects.get_or_create(**category_data)[0]
-        supplier, created = Supplier.objects.get_or_create(**supplier_data)
-        product = Product.objects.create(category=category, supplier=supplier, **validated_data)
+        brand = validated_data.pop('brand')
+        category = validated_data.pop('category')
+        supplier = validated_data.pop('supplier')
+        product = Product.objects.create(category=category, supplier=supplier, brand=brand, **validated_data)
         public_price = validated_data.get('public_price', None)
         wholesale_price = validated_data.get('wholesale_price', None)
         if wholesale_price is not None:
@@ -54,6 +62,7 @@ class ProductSerializer(serializers.ModelSerializer):
             product.update_price(public_price, None)
 
         return product
+
 
     def update(self, instance, validated_data):
         """Update product."""

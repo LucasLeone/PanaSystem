@@ -1,1 +1,1 @@
-from .products import ProductViewSet, CategoryViewSet
+from .products import ProductViewSet, CategoryViewSet, BrandViewSet

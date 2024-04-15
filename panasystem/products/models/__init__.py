@@ -1,1 +1,1 @@
-from .products import Product, PriceHistory, Category
+from .products import Product, PriceHistory, Category, Brand
