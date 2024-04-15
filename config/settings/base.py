@@ -86,10 +86,10 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "panasystem.users",
     # Your stuff: custom apps go here
-    "panasystem.customers",
-    "panasystem.products",
-    "panasystem.sales",
-    "panasystem.suppliers",
+    "panasystem.customers.apps.CustomersConfig",
+    "panasystem.products.apps.ProductsConfig",
+    "panasystem.sales.apps.SalesConfig",
+    "panasystem.suppliers.apps.SuppliersConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

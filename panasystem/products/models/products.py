@@ -28,7 +28,8 @@ class Product(PanaderiaModel):
         'Codigo de Barras',
         max_length=50,
         null=True,
-        blank=True
+        blank=True,
+        unique=True
     )
     name = models.CharField(
         'Nombre',
@@ -37,7 +38,8 @@ class Product(PanaderiaModel):
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
-        related_name="products"
+        related_name="category",
+        verbose_name = 'Categoria'
     )
     public_price = models.DecimalField(
         'Precio al público',
@@ -51,15 +53,32 @@ class Product(PanaderiaModel):
         null=True,
         blank=True
     )
+    brand = models.CharField(
+        'Marca',
+        max_length=50,
+        null=True,
+        blank=True
+    )
+    description = models.TextField(
+        'Descripción',
+        null=True,
+        blank=True,
+        max_length=100
+    )
+    supplier = models.ForeignKey(
+        'suppliers.Supplier',
+        verbose_name = 'Proveedor',
+        on_delete=models.CASCADE,
+        related_name="supplier",
+        null=True,
+        blank=True
+    )
 
-    def update_price(self, new_price, wholesale=False):
+    def update_price(self, public_price, wholesale_price):
         """Update price and create price history."""
-        if wholesale:
-            self.wholesale_price = new_price
-            PriceHistory.objects.create(product=self, price=new_price, wholesale=True)
-        else:
-            self.public_price = new_price
-            PriceHistory.objects.create(product=self, price=new_price, wholesale=False)
+        self.public_price = public_price
+        self.wholesale_price = wholesale_price
+        PriceHistory.objects.create(product=self, public_price=public_price, wholesale_price=wholesale_price)
         self.save()
 
     def __str__(self):
@@ -75,13 +94,17 @@ class PriceHistory(PanaderiaModel):
         on_delete=models.CASCADE,
         related_name="price_history"
     )
-    price = models.DecimalField(
+    public_price = models.DecimalField(
         max_digits=10,
         decimal_places=2
     )
-    wholesale = models.BooleanField(default=False)
-    date_updated = models.DateTimeField(default=timezone.now)
+    wholesale_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        blank=True,
+        null=True
+    )
 
     class Meta:
         """Meta options."""
-        ordering = ['-date_updated']
+        ordering = ['-created']
