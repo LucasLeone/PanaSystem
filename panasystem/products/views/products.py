@@ -20,7 +20,6 @@ class ProductViewSet(mixins.CreateModelMixin,
     
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    lookup_field = 'pk'
 
 
 class CategoryViewSet(mixins.CreateModelMixin,
