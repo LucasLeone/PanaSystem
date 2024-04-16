@@ -14,9 +14,46 @@ class Customer(PanaderiaModel):
         'Nombre',
         max_length=50
     )
-    celular = models.CharField(max_length=15)
-    address = models.CharField(max_length=30)
-    city = models.CharField(max_lenght=20)
+    celular = models.CharField(
+        max_length=15,
+        blank=True,
+        null=True
+    )
+    email = models.EmailField(
+        max_length=50,
+        blank=True,
+        null=True
+    )    
+    address = models.CharField(
+        'Dirección',
+        max_length=30,
+        blank=True,
+        null=True
+    )
+    city = models.CharField(
+        'Ciudad',
+        max_length=20,
+        blank=True,
+        null=True
+    )
+    afip_condition = models.CharField(
+        'Condición frente al IVA',
+        max_length=75,
+        blank=True,
+        null=True
+    )
+    id_type = models.CharField(
+        'Tipo de documento',
+        max_length=20,
+        blank=True,
+        null=True
+    )
+    id_number = models.CharField(
+        'Número de documento',
+        max_length=20,
+        blank=True,
+        null=True
+    )
     is_active = models.BooleanField(
         'Activo',
         default=True,
