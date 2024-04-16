@@ -5,8 +5,7 @@ from django.db import models
 
 # Utilities
 from panasystem.utils.models import PanaderiaModel
-from django.utils import timezone
-from datetime import datetime
+from django.utils.timezone import now
 
 
 class Order(PanaderiaModel):
@@ -14,7 +13,7 @@ class Order(PanaderiaModel):
     
     date = models.DateTimeField(
         'Fecha',
-        default=datetime.now()
+        default=now()
     )
     supplier = models.ForeignKey(
         'suppliers.Supplier',
