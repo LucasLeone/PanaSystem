@@ -6,10 +6,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 
 # Serializers
-from panasystem.products.serializers import ProductSerializer, PriceHistorySerializer, CategorySerializer, BrandSerializer
+from panasystem.products.serializers import ProductSerializer, CategorySerializer, BrandSerializer
 
 # Models
-from panasystem.products.models import Product, PriceHistory, Category, Brand
+from panasystem.products.models import Product, Category, Brand
 
 
 class ProductViewSet(mixins.CreateModelMixin,
@@ -37,7 +37,9 @@ class CategoryViewSet(mixins.CreateModelMixin,
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-
+    filter_backends = (SearchFilter,)
+    search_fields = ('name',)
+    
 
 class BrandViewSet(mixins.CreateModelMixin,
                     mixins.UpdateModelMixin,
@@ -49,3 +51,5 @@ class BrandViewSet(mixins.CreateModelMixin,
 
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer
+    filter_backends = (SearchFilter,)
+    search_fields = ('name',)

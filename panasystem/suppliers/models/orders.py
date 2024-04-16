@@ -21,6 +21,33 @@ class Order(PanaderiaModel):
         on_delete=models.CASCADE,
         verbose_name='Proveedor'
     )
+    total = models.PositiveIntegerField()
+    description = models.TextField(
+        'Descripción',
+        max_length=200,
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        """Return Order #self.pk: $self.total"""
+        return f"Order #{self.pk}: ${self.total}"
+    
+
+
+""" ME CONFUNDI, ESTAMOS HACIENDO UN PEDIDO A UN VIAJANTE, NADA MAS QUE ESO
+class Order(PanaderiaModel):
+    ""Order model.""
+    
+    date = models.DateTimeField(
+        'Fecha',
+        default=datetime.now()
+    )
+    supplier = models.ForeignKey(
+        'suppliers.Supplier',
+        on_delete=models.CASCADE,
+        verbose_name='Proveedor'
+    )
     payment_method = models.CharField(max_length=50)
     wholesale = models.BooleanField(
         'Venta mayorista',
@@ -54,3 +81,4 @@ class OrderDetail(models.Model):
     def save(self, *args, **kwargs):
         self.subtotal = self.quantity * self.unit_price
         super().save(*args, **kwargs)
+"""

@@ -1,2 +1,2 @@
 from .suppliers import SupplierSerializer
-from .orders import OrderDetailSerializer, OrderSerializer
+from .orders import OrderSerializer
