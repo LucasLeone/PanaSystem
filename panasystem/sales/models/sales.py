@@ -5,7 +5,7 @@ from django.db import models
 
 # Utilities
 from panasystem.utils.models import PanaderiaModel
-from datetime import datetime
+from django.utils.timezone import now
 
 
 PAYMENT_METHODS = (
@@ -21,7 +21,7 @@ class Sale(PanaderiaModel):
 
     date = models.DateTimeField(
         'Fecha',
-        default=datetime.now()
+        default=now
     )
     customer = models.ForeignKey(
         'customers.Customer',
@@ -48,6 +48,10 @@ class Sale(PanaderiaModel):
         decimal_places=2,
         null=True, 
         blank=True
+    )
+    delivered = models.BooleanField(
+        'Entregado',
+        default=True
     )
 
     @property

@@ -13,7 +13,7 @@ class Order(PanaderiaModel):
     
     date = models.DateTimeField(
         'Fecha',
-        default=now()
+        default=now
     )
     supplier = models.ForeignKey(
         'suppliers.Supplier',

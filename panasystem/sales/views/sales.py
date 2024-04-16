@@ -3,14 +3,28 @@
 # Django REST Framework
 from rest_framework import mixins, viewsets, status
 from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework as filters
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.response import Response
 
 # Serializers
 from panasystem.sales.serializers import SaleSerializer, SaleDetailSerializer
 
 # Models
-from panasystem.sales.models import Sale, SaleDetail
+from panasystem.sales.models import Sale
 from panasystem.products.models import Product
+
+
+class SaleFilter(filters.FilterSet):
+    """Sale filter."""
+
+    date_range = filters.DateFromToRangeFilter(field_name='date')
+
+    class Meta:
+        """Meta options."""
+
+        model = Sale
+        fields = ['customer', 'is_bakery', 'payment_method', 'date', 'date_range']
 
 
 class SaleViewSet(mixins.CreateModelMixin,
@@ -24,6 +38,7 @@ class SaleViewSet(mixins.CreateModelMixin,
     queryset = Sale.objects.all()
     serializer_class = SaleSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
+    filterset_class = SaleFilter
     filterset_fields = ('customer', 'is_bakery', 'payment_method', 'date')
     search_fields = ('customer',)
     ordering_fields = ('date', 'total')
