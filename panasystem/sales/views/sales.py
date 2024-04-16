@@ -3,8 +3,7 @@
 # Django REST Framework
 from rest_framework import mixins, viewsets, status
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.response import Response
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 # Serializers
 from panasystem.sales.serializers import SaleSerializer, SaleDetailSerializer
@@ -24,6 +23,11 @@ class SaleViewSet(mixins.CreateModelMixin,
 
     queryset = Sale.objects.all()
     serializer_class = SaleSerializer
+    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
+    filterset_fields = ('customer', 'is_bakery', 'payment_method', 'date')
+    search_fields = ('customer',)
+    ordering_fields = ('date', 'total')
+    
 
     def create(self, request, *args, **kwargs):
         details_data = dict(request.data).pop('details', [])
