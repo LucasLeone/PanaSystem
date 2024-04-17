@@ -18,7 +18,17 @@ class CustomerViewSet(mixins.CreateModelMixin,
                     mixins.ListModelMixin,
                     mixins.DestroyModelMixin,
                     viewsets.GenericViewSet):
-    """Customer view set."""
+    """Customer view set.
+    
+    Functions:
+        - Create a customer.
+        - List customer:
+            * Filter by 'is_active, afip_condition, city'.
+            * Search by 'name, email, celular, address, id_number'
+        - Retrieve a customer.
+        - Delete a customer.
+        - Update a customer.
+    """
     
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer

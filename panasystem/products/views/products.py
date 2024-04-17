@@ -18,7 +18,17 @@ class ProductViewSet(mixins.CreateModelMixin,
                     mixins.ListModelMixin,
                     mixins.DestroyModelMixin,
                     viewsets.GenericViewSet):
-    """Product view set."""
+    """Product view set.
+    
+    Functions:
+        - Create a product.
+        - List products:
+            * Filter by 'category, brand, supplier'.
+            * Order by 'code, name'.
+        - Retrieve a product.
+        - Update a product.
+        - Delete a product.
+    """
     
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -33,7 +43,16 @@ class CategoryViewSet(mixins.CreateModelMixin,
                     mixins.ListModelMixin,
                     mixins.DestroyModelMixin,
                     viewsets.GenericViewSet):
-    """Category view set."""
+    """Category view set.
+    
+    Functions:
+        - Create a category.
+        - List categories:
+            * Search by 'name'.
+        - Retrieve a category.
+        - Update a category.
+        - Delete a category.
+    """
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -47,7 +66,16 @@ class BrandViewSet(mixins.CreateModelMixin,
                     mixins.ListModelMixin,
                     mixins.DestroyModelMixin,
                     viewsets.GenericViewSet):
-    """Brand view set."""
+    """Brand view set.
+    
+    Functions:
+        - Create a brand.
+        - List brands:
+            * Search by 'name'.
+        - Retrieve a brand.
+        - Update a brand.
+        - Delete a brand.
+    """
 
     queryset = Brand.objects.all()
     serializer_class = BrandSerializer

@@ -46,7 +46,20 @@ class SaleViewSet(mixins.CreateModelMixin,
                     mixins.ListModelMixin,
                     mixins.DestroyModelMixin,
                     viewsets.GenericViewSet):
-    """Sale view set."""
+    """Sale view set.
+    
+    Functions:
+        - Create a quick sale (total only).
+        - Create a detailed sale (all fields, with details).
+        - Create multiple sales at once or just one.
+        - List sales:
+            * Filter by 'customer, is_bakery, payment_method, delivered, date, date_range'.
+            * Search by customer.
+            * Order by date and total.
+        - Retrieve a sale
+        - Delete a sale
+        - Update a sale
+    """
 
     queryset = Sale.objects.all()
     serializer_class = SaleSerializer
