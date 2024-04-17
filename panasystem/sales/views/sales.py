@@ -14,17 +14,30 @@ from panasystem.sales.serializers import SaleSerializer, SaleDetailSerializer
 from panasystem.sales.models import Sale
 from panasystem.products.models import Product
 
+# Utilities
+from datetime import datetime, timedelta
+
+
+class DateFilter(filters.Filter):
+    def filter(self, queryset, value):
+        if value:
+            start_date = datetime.strptime(value, '%Y-%m-%d').date()
+            end_date = start_date + timedelta(days=1)
+            return queryset.filter(date__gte=start_date, date__lt=end_date)
+        return queryset
+
 
 class SaleFilter(filters.FilterSet):
     """Sale filter."""
 
     date_range = filters.DateFromToRangeFilter(field_name='date')
+    date = DateFilter(field_name='date')
 
     class Meta:
         """Meta options."""
 
         model = Sale
-        fields = ['customer', 'is_bakery', 'payment_method', 'date', 'date_range']
+        fields = ['customer', 'is_bakery', 'payment_method', 'delivered', 'date', 'date_range']
 
 
 class SaleViewSet(mixins.CreateModelMixin,
@@ -39,35 +52,43 @@ class SaleViewSet(mixins.CreateModelMixin,
     serializer_class = SaleSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
     filterset_class = SaleFilter
-    filterset_fields = ('customer', 'is_bakery', 'payment_method', 'date')
     search_fields = ('customer',)
     ordering_fields = ('date', 'total')
     
 
     def create(self, request, *args, **kwargs):
-        details_data = dict(request.data).pop('details', [])
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        """Create sales and sale details."""
+        
+        sales_data = request.data
+        if not isinstance(sales_data, list):
+            sales_data = [sales_data]
 
-        sale_instance = serializer.instance
+        created_sales = []
 
-        is_bakery = request.data.get('is_bakery', False)
+        for sale_data in sales_data:
+            details_data = sale_data.pop('details', [])
+            serializer = self.get_serializer(data=sale_data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            sale_instance = serializer.instance
 
-        for detail_data in details_data:
-            product_id = detail_data['product']
-            product = Product.objects.get(pk=product_id)
-            if is_bakery and product.wholesale_price is not None:
-                unit_price = product.wholesale_price
-            else:
-                unit_price = product.public_price
+            is_bakery = sale_data.get('is_bakery', False)
 
-            detail_data['unit_price'] = unit_price
+            for detail_data in details_data:
+                product_id = detail_data['product']
+                product = Product.objects.get(pk=product_id)
+                if is_bakery and product.wholesale_price is not None:
+                    unit_price = product.wholesale_price
+                else:
+                    unit_price = product.public_price
 
+                detail_data['unit_price'] = unit_price
 
-        sale_details_serializer = SaleDetailSerializer(data=details_data, many=True)
-        sale_details_serializer.is_valid(raise_exception=True)
-        sale_details_serializer.save(sale=sale_instance)
+            sale_details_serializer = SaleDetailSerializer(data=details_data, many=True)
+            sale_details_serializer.is_valid(raise_exception=True)
+            sale_details_serializer.save(sale=sale_instance)
 
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+            created_sales.append(serializer.data)
+
+        headers = self.get_success_headers(created_sales)
+        return Response(created_sales, status=status.HTTP_201_CREATED, headers=headers)

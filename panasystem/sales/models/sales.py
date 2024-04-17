@@ -74,7 +74,10 @@ class SaleDetail(PanaderiaModel):
         on_delete=models.CASCADE,
         related_name='details_product'
     )
-    quantity = models.PositiveIntegerField()
+    quantity = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
     unit_price = models.DecimalField(
         max_digits=10,
         decimal_places=2
