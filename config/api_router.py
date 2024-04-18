@@ -12,6 +12,7 @@ from panasystem.products.views import ProductViewSet, CategoryViewSet, BrandView
 from panasystem.suppliers.views import OrderViewSet, SuppliersViewSet
 from panasystem.customers.views import CustomerViewSet
 from panasystem.sales.views import SaleViewSet
+from panasystem.statistics.views import SalesStatistics
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
@@ -23,6 +24,9 @@ router.register("suppliers", SuppliersViewSet)
 router.register("brands", BrandViewSet)
 router.register("customer", CustomerViewSet)
 router.register("sales", SaleViewSet)
+# router.register("statistics", SalesStatistics)
 
 app_name = "api"
-urlpatterns = router.urls
+urlpatterns = router.urls + [
+    path('statistics/', SalesStatistics.as_view(), name='sales_statistics'),
+]
