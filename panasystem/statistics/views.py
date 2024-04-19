@@ -4,7 +4,7 @@
 from django.db.models import Sum
 
 # Django REST Framework
-from rest_framework.views import APIView
+from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -15,19 +15,23 @@ from panasystem.sales.models import Sale
 from datetime import datetime, timedelta
 
 
-class SalesStatistics(APIView):
-    """Sales statistics."""
+class Statistics(viewsets.ViewSet):
+    """PanaSystem statistics."""
 
-    def get(self, request, format=None):
+    def list(self, request):
+        """Get the JSON."""
+
         statistics = {
-            'today': self.get_statistics_for_today(request),
-            'week': self.get_statistics_for_week(request),
-            'month': self.get_statistics_for_month(request),
-            'custom': self.get_custom_statistics(request),
+            'sales_today': self.get_sales_statistics_for_today(request),
+            'sales_week': self.get_sales_statistics_for_week(request),
+            'sales_month': self.get_sales_statistics_for_month(request),
+            'sales_custom': self.get_sales_custom_statistics(request),
         }
         return Response(statistics, status=status.HTTP_200_OK)
 
-    def get_statistics_for_today(self, request):
+    def get_sales_statistics_for_today(self, request):
+        """Get sales statistics' for today."""
+
         today = datetime.now().date()
         payment_method_today = request.query_params.get("payment_method_today")
         sales_for_today = Sale.objects.filter(date__date=today)
@@ -40,7 +44,9 @@ class SalesStatistics(APIView):
             'sales_count_today': sales_count_today or 0,
         }
 
-    def get_statistics_for_week(self, request):
+    def get_sales_statistics_for_week(self, request):
+        """Get sales statistics' for this week."""
+        
         today = datetime.now().date()
         start_of_week = today - timedelta(days=today.weekday())
         end_of_week = start_of_week + timedelta(days=6)
@@ -55,7 +61,9 @@ class SalesStatistics(APIView):
             'sales_count_week': sales_count_week or 0,
         }
 
-    def get_statistics_for_month(self, request):
+    def get_sales_statistics_for_month(self, request):
+        """Get sales statistics' for this month."""
+
         today = datetime.now().date()
         first_day_of_month = today.replace(day=1)
         last_day_of_month = first_day_of_month.replace(day=1, month=first_day_of_month.month+1) - timedelta(days=1)
@@ -70,7 +78,9 @@ class SalesStatistics(APIView):
             'sales_count_month': sales_count_month or 0,
         }
 
-    def get_custom_statistics(self, request):
+    def get_sales_custom_statistics(self, request):
+        """Get sales statistics' for a period."""
+
         start_date = request.query_params.get('start_date')
         end_date = request.query_params.get('end_date')
         payment_method_customize = request.query_params.get('payment_method_customize')
