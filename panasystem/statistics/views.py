@@ -9,7 +9,8 @@ from rest_framework.response import Response
 from rest_framework import status
 
 # Models
-from panasystem.sales.models import Sale
+from panasystem.sales.models import Sale, SaleDetail
+from panasystem.products.models import Product
 
 # Utilities
 from datetime import datetime, timedelta
@@ -39,9 +40,13 @@ class Statistics(viewsets.ViewSet):
             sales_for_today = sales_for_today.filter(payment_method=payment_method_today)
         total_earned_today = sales_for_today.aggregate(total_earned=Sum('total'))['total_earned']
         sales_count_today = sales_for_today.count()
+
+        best_selling_products = self.get_best_selling_products(today, today + timedelta(days=1))
+        
         return {
             'total_earned_today': total_earned_today or 0,
             'sales_count_today': sales_count_today or 0,
+            'best_selling_products': best_selling_products
         }
 
     def get_sales_statistics_for_week(self, request):
@@ -56,9 +61,12 @@ class Statistics(viewsets.ViewSet):
             sales_for_week = sales_for_week.filter(payment_method=payment_method_week)
         total_earned_week = sales_for_week.aggregate(total_earned=Sum('total'))['total_earned']
         sales_count_week = sales_for_week.count()
+        best_selling_products = self.get_best_selling_products(start_of_week, end_of_week)
+
         return {
             'total_earned_week': total_earned_week or 0,
             'sales_count_week': sales_count_week or 0,
+            'best_selling_products': best_selling_products
         }
 
     def get_sales_statistics_for_month(self, request):
@@ -73,9 +81,12 @@ class Statistics(viewsets.ViewSet):
             sales_for_month = sales_for_month.filter(payment_method=payment_method_month)
         total_earned_month = sales_for_month.aggregate(total_earned=Sum('total'))['total_earned']
         sales_count_month = sales_for_month.count()
+        best_selling_products = self.get_best_selling_products(first_day_of_month, last_day_of_month)
+        
         return {
             'total_earned_month': total_earned_month or 0,
             'sales_count_month': sales_count_month or 0,
+            'best_selling_products': best_selling_products
         }
 
     def get_sales_custom_statistics(self, request):
@@ -89,7 +100,30 @@ class Statistics(viewsets.ViewSet):
             sales_for_period = sales_for_period.filter(payment_method=payment_method_customize)
         total_earned_period = sales_for_period.aggregate(total_earned=Sum('total'))['total_earned']
         sales_count_period = sales_for_period.count()
+        best_selling_products = self.get_best_selling_products(start_date, end_date)
+
         return {
             'total_earned_period': total_earned_period or 0,
             'sales_count_period': sales_count_period or 0,
+            'best_selling_products': best_selling_products
         }
+    
+    def get_best_selling_products(self, start_date=None, end_date=None):
+        """Get the best selling products."""
+        
+        if start_date and end_date:
+            sales = SaleDetail.objects.filter(sale__date__range=[start_date, end_date])
+            best_selling_product_ids = sales.values('product').annotate(total_quantity=Sum('quantity')).order_by('-total_quantity')[:5]
+
+            best_selling_products = Product.objects.filter(id__in=[product['product'] for product in best_selling_product_ids])
+            result = []
+            for product in best_selling_products:
+                total_quantity = next(item['total_quantity'] for item in best_selling_product_ids if item['product'] == product.id)
+
+                result.append({
+                    'product_name': product.name,
+                    'total_quantity_sold': total_quantity
+                })
+            return result
+        else:
+            return 0
