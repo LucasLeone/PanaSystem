@@ -16,7 +16,7 @@ from panasystem.statistics.views import Statistics
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
 
-router.register("users", UserViewSet)
+# router.register("users", UserViewSet)
 router.register("products", ProductViewSet)
 router.register("categories", CategoryViewSet)
 router.register("orders", OrderViewSet)
