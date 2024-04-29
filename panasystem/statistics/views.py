@@ -17,7 +17,12 @@ from datetime import datetime, timedelta
 
 
 class Statistics(viewsets.ViewSet):
-    """PanaSystem statistics."""
+    """PanaSystem statistics.
+    
+    Functions:
+        - Show sales for today, current week and month.
+        - Filter by payment_method for each one.
+    """
 
     def list(self, request):
         """Get the JSON."""
