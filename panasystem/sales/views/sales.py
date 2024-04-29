@@ -96,6 +96,7 @@ class SaleViewSet(mixins.CreateModelMixin,
                     unit_price = product.public_price
 
                 detail_data['unit_price'] = unit_price
+                product.update_stock(detail_data['quantity'])
 
             sale_details_serializer = SaleDetailSerializer(data=details_data, many=True)
             sale_details_serializer.is_valid(raise_exception=True)

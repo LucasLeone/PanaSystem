@@ -99,6 +99,11 @@ class Product(PanaderiaModel):
         null=True,
         blank=True
     )
+    current_stock = models.PositiveSmallIntegerField(
+        'Stock actual',
+        blank=True,
+        null=True
+    )
 
     def update_price(self, public_price, wholesale_price):
         """Update price and create price history."""
@@ -106,6 +111,12 @@ class Product(PanaderiaModel):
         self.wholesale_price = wholesale_price
         PriceHistory.objects.create(product=self, public_price=public_price, wholesale_price=wholesale_price)
         self.save()
+
+    def update_stock(self, quantity):
+        """Update current stock after creating a sale."""
+        if self.current_stock > 0:
+            self.current_stock -= quantity
+            self.save()
 
     def __str__(self):
         """Return name."""
