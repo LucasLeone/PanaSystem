@@ -22,7 +22,7 @@ router.register("categories", CategoryViewSet)
 router.register("orders", OrderViewSet)
 router.register("suppliers", SuppliersViewSet)
 router.register("brands", BrandViewSet)
-router.register("customer", CustomerViewSet)
+router.register("customers", CustomerViewSet)
 router.register("sales", SaleViewSet)
 router.register('statistics', Statistics, basename='statistics')
 
