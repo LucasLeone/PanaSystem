@@ -3,7 +3,7 @@
 # Django REST Framework
 from rest_framework import mixins, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 # Serializers
 from panasystem.products.serializers import ProductSerializer, CategorySerializer, BrandSerializer
@@ -32,9 +32,10 @@ class ProductViewSet(mixins.CreateModelMixin,
     
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = (DjangoFilterBackend, SearchFilter)
+    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
     filterset_fields = ('category', 'brand', 'supplier')
     search_fields = ('code', 'name')
+    ordering_fields = ('code', 'name')
 
 
 class CategoryViewSet(mixins.CreateModelMixin,

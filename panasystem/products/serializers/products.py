@@ -75,6 +75,7 @@ class ProductSerializer(serializers.ModelSerializer):
         instance.brand = validated_data.get('brand', instance.brand)
         instance.description = validated_data.get('description', instance.description)
         instance.supplier = validated_data.get('supplier', instance.supplier)
+        instance.current_stock = validated_data.get('current_stock', instance.current_stock)
 
         if public_price != instance.public_price:
             print(wholesale_price)
