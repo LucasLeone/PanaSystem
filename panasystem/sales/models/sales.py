@@ -43,11 +43,19 @@ class Sale(PanaderiaModel):
         max_length=14
     )
     total = models.DecimalField(
-        'Total calculado',
+        'Total',
         max_digits=10,
         decimal_places=2,
         null=True, 
         blank=True
+    )
+    total_charged = models.DecimalField(
+        'Total cobrado',
+        max_digits=10,
+        decimal_places=2,
+        null=True, 
+        blank=True,
+        help_text='Indicar cuanto se cobro por ahora.'
     )
     delivered = models.BooleanField(
         'Entregado',
@@ -60,6 +68,16 @@ class Sale(PanaderiaModel):
             self.total = sum(detail.subtotal for detail in self.sale_details.all())
             self.save()
         return None
+    
+    def save(self, *args, **kwargs):
+        """Save total charged if it's null."""
+        if self.total_charged == None:
+            self.total_charged = self.total
+        super().save(*args, **kwargs)
+    
+    def __str__(self):
+        """Return #pk + date + total."""
+        return f'Sale #{self.pk} - {self.date} - ${self.total}'
 
 
 class SaleDetail(PanaderiaModel):

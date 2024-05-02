@@ -114,9 +114,16 @@ class Product(PanaderiaModel):
 
     def update_stock(self, quantity):
         """Update current stock after creating a sale."""
-        if self.current_stock > 0:
-            self.current_stock -= quantity
-            self.save()
+        if self.current_stock != None:
+            if self.current_stock > 0:
+                self.current_stock -= quantity
+                self.save()
+            else:
+                raise ValueError("Stock insuficiente para actualizar.")
+        
+    def get_brand_name(self):
+        """Get brand name."""
+        return self.brand.name
 
     def __str__(self):
         """Return name."""

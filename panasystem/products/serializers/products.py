@@ -38,9 +38,9 @@ class PriceHistorySerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     """Serializer for the Product model."""
 
-    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
-    supplier = serializers.PrimaryKeyRelatedField(queryset=Supplier.objects.all())
-    brand = serializers.PrimaryKeyRelatedField(queryset=Brand.objects.all())
+    category = serializers.SlugRelatedField(slug_field='name', queryset=Category.objects.all())
+    supplier = serializers.SlugRelatedField(slug_field='name', queryset=Supplier.objects.all())
+    brand = serializers.SlugRelatedField(slug_field='name', queryset=Brand.objects.all())
     price_history = PriceHistorySerializer(many=True, read_only=True)
 
     class Meta:
