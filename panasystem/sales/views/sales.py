@@ -37,7 +37,7 @@ class SaleFilter(filters.FilterSet):
         """Meta options."""
 
         model = Sale
-        fields = ['customer', 'is_bakery', 'payment_method', 'delivered', 'date', 'date_range']
+        fields = ['customer', 'is_bakery', 'payment_method', 'delivered', 'date', 'date_range', 'total_charged']
 
 
 class SaleViewSet(mixins.CreateModelMixin,

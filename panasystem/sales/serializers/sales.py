@@ -21,6 +21,11 @@ class SaleDetailSerializer(serializers.ModelSerializer):
 class SaleSerializer(serializers.ModelSerializer):
     """Sale serializer."""
 
+    customer_name = serializers.SerializerMethodField()
+    
+    def get_customer_name(self, obj):
+        return obj.customer.name if obj.customer else ''
+
     sale_details = SaleDetailSerializer(many=True, read_only=True)
     total_help = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
 
