@@ -39,8 +39,8 @@ class ProductSerializer(serializers.ModelSerializer):
     """Serializer for the Product model."""
 
     category = serializers.SlugRelatedField(slug_field='name', queryset=Category.objects.all())
-    supplier = serializers.SlugRelatedField(slug_field='name', queryset=Supplier.objects.all())
-    brand = serializers.SlugRelatedField(slug_field='name', queryset=Brand.objects.all())
+    supplier = serializers.SlugRelatedField(slug_field='name', queryset=Supplier.objects.all(), required=False)
+    brand = serializers.SlugRelatedField(slug_field='name', queryset=Brand.objects.all(), required=False)
     price_history = PriceHistorySerializer(many=True, read_only=True)
 
     class Meta:
@@ -50,11 +50,11 @@ class ProductSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Create product."""
 
-        brand = validated_data.pop('brand')
+        brand = validated_data.pop('brand', None)
         category = validated_data.pop('category')
-        supplier = validated_data.pop('supplier')
+        supplier = validated_data.pop('supplier', None)
         product = Product.objects.create(category=category, supplier=supplier, brand=brand, **validated_data)
-        public_price = validated_data.get('public_price', None)
+        public_price = validated_data.get('public_price', )
         wholesale_price = validated_data.get('wholesale_price', None)
         if wholesale_price is not None:
             product.update_price(public_price, wholesale_price)

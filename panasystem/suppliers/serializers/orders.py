@@ -11,6 +11,11 @@ class OrderSerializer(serializers.ModelSerializer):
     """Order serializer."""
 
     supplier = serializers.PrimaryKeyRelatedField(queryset=Supplier.objects.all())
+    supplier_name = serializers.SerializerMethodField()
+
+    def get_supplier_name(self, obj):
+        """Get supplier name."""
+        return obj.supplier.name if obj.supplier else None
 
     class Meta:
         """Meta options."""

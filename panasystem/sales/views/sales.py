@@ -65,7 +65,7 @@ class SaleViewSet(mixins.CreateModelMixin,
     serializer_class = SaleSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
     filterset_class = SaleFilter
-    search_fields = ('customer',)
+    search_fields = ('customer__name',)
     ordering_fields = ('date', 'total')
     
 

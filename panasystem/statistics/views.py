@@ -11,6 +11,7 @@ from rest_framework import status
 # Models
 from panasystem.sales.models import Sale, SaleDetail
 from panasystem.products.models import Product
+from panasystem.suppliers.models import Order
 
 # Utilities
 from datetime import datetime, timedelta
@@ -45,13 +46,15 @@ class Statistics(viewsets.ViewSet):
             sales_for_today = sales_for_today.filter(payment_method=payment_method_today)
         total_earned_today = sales_for_today.aggregate(total_earned=Sum('total'))['total_earned']
         sales_count_today = sales_for_today.count()
+        total_orders_today = Order.objects.filter(date__date=today).aggregate(total_earned=Sum('total'))['total_earned']
 
         best_selling_products = self.get_best_selling_products(today, today + timedelta(days=1))
         
         return {
             'total_earned_today': total_earned_today or 0,
             'sales_count_today': sales_count_today or 0,
-            'best_selling_products': best_selling_products
+            'best_selling_products': best_selling_products,
+            'total_orders_today': total_orders_today
         }
 
     def get_sales_statistics_for_week(self, request):
@@ -67,11 +70,13 @@ class Statistics(viewsets.ViewSet):
         total_earned_week = sales_for_week.aggregate(total_earned=Sum('total'))['total_earned']
         sales_count_week = sales_for_week.count()
         best_selling_products = self.get_best_selling_products(start_of_week, end_of_week)
+        total_orders_week = Order.objects.filter(date__date__range=[start_of_week, end_of_week]).aggregate(total_earned=Sum('total'))['total_earned']
 
         return {
             'total_earned_week': total_earned_week or 0,
             'sales_count_week': sales_count_week or 0,
-            'best_selling_products': best_selling_products
+            'best_selling_products': best_selling_products,
+            'total_orders_week': total_orders_week
         }
 
     def get_sales_statistics_for_month(self, request):
@@ -87,11 +92,13 @@ class Statistics(viewsets.ViewSet):
         total_earned_month = sales_for_month.aggregate(total_earned=Sum('total'))['total_earned']
         sales_count_month = sales_for_month.count()
         best_selling_products = self.get_best_selling_products(first_day_of_month, last_day_of_month)
+        total_orders_month = Order.objects.filter(date__date__range=[first_day_of_month, last_day_of_month]).aggregate(total_earned=Sum('total'))['total_earned']
         
         return {
             'total_earned_month': total_earned_month or 0,
             'sales_count_month': sales_count_month or 0,
-            'best_selling_products': best_selling_products
+            'best_selling_products': best_selling_products,
+            'total_orders_month': total_orders_month
         }
 
     def get_sales_custom_statistics(self, request):
@@ -106,11 +113,13 @@ class Statistics(viewsets.ViewSet):
         total_earned_period = sales_for_period.aggregate(total_earned=Sum('total'))['total_earned']
         sales_count_period = sales_for_period.count()
         best_selling_products = self.get_best_selling_products(start_date, end_date)
+        total_orders_period = Order.objects.filter(date__date__range=[start_date, end_date]).aggregate(total_earned=Sum('total'))['total_earned']
 
         return {
             'total_earned_period': total_earned_period or 0,
             'sales_count_period': sales_count_period or 0,
-            'best_selling_products': best_selling_products
+            'best_selling_products': best_selling_products,
+            'total_orders_period': total_orders_period
         }
     
     def get_best_selling_products(self, start_date=None, end_date=None):
