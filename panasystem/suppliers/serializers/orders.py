@@ -10,8 +10,7 @@ from panasystem.suppliers.models import Order, Supplier
 class OrderSerializer(serializers.ModelSerializer):
     """Order serializer."""
 
-    supplier = serializers.PrimaryKeyRelatedField(queryset=Supplier.objects.all())
-    supplier_name = serializers.SerializerMethodField()
+    supplier = serializers.SlugRelatedField(slug_field='name', queryset=Supplier.objects.all())
 
     def get_supplier_name(self, obj):
         """Get supplier name."""
