@@ -4,6 +4,8 @@
 from rest_framework import mixins, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # Serializers
 from panasystem.suppliers.serializers import OrderSerializer
@@ -36,3 +38,5 @@ class OrderViewSet(mixins.CreateModelMixin,
     filter_backends = (DjangoFilterBackend, SearchFilter)
     filterset_fields = ('supplier',)
     search_fields = ('description',)
+    # authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]

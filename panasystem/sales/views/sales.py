@@ -6,6 +6,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django_filters import rest_framework as filters
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # Serializers
 from panasystem.sales.serializers import SaleSerializer, SaleDetailSerializer
@@ -67,6 +69,8 @@ class SaleViewSet(mixins.CreateModelMixin,
     filterset_class = SaleFilter
     search_fields = ('customer__name',)
     ordering_fields = ('date', 'total')
+    # authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     
 
     def create(self, request, *args, **kwargs):

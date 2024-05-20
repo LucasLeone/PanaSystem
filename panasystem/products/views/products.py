@@ -4,6 +4,8 @@
 from rest_framework import mixins, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # Serializers
 from panasystem.products.serializers import ProductSerializer, CategorySerializer, BrandSerializer
@@ -36,6 +38,8 @@ class ProductViewSet(mixins.CreateModelMixin,
     filterset_fields = ('category', 'brand', 'supplier')
     search_fields = ('code', 'name')
     ordering_fields = ('code', 'name')
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
 
 class CategoryViewSet(mixins.CreateModelMixin,
@@ -59,7 +63,9 @@ class CategoryViewSet(mixins.CreateModelMixin,
     serializer_class = CategorySerializer
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
-    
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
 
 class BrandViewSet(mixins.CreateModelMixin,
                     mixins.UpdateModelMixin,
@@ -82,3 +88,5 @@ class BrandViewSet(mixins.CreateModelMixin,
     serializer_class = BrandSerializer
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
