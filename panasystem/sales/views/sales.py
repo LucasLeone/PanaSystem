@@ -71,7 +71,6 @@ class SaleViewSet(mixins.CreateModelMixin,
     ordering_fields = ('date', 'total')
     # authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    
 
     def create(self, request, *args, **kwargs):
         """Create sales and sale details."""
