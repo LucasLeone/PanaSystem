@@ -92,6 +92,8 @@ LOCAL_APPS = [
     "panasystem.products.apps.ProductsConfig",
     "panasystem.sales.apps.SalesConfig",
     "panasystem.suppliers.apps.SuppliersConfig",
+    "panasystem.employees.apps.EmployeesConfig",
+    "panasystem.expenses.apps.ExpensesConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

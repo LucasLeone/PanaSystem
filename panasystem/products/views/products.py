@@ -38,7 +38,7 @@ class ProductViewSet(mixins.CreateModelMixin,
     filterset_fields = ('category', 'brand', 'supplier')
     search_fields = ('code', 'name')
     ordering_fields = ('code', 'name')
-    authentication_classes = [JWTAuthentication]
+    # authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
 
