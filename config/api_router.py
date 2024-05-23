@@ -11,7 +11,7 @@ from panasystem.products.views import ProductViewSet, CategoryViewSet, BrandView
 from panasystem.suppliers.views import OrderViewSet, SuppliersViewSet
 from panasystem.customers.views import CustomerViewSet
 from panasystem.sales.views import SaleViewSet
-from panasystem.expenses.views import ExpenseViewSet
+from panasystem.expenses.views import ExpenseViewSet, ExpenseCategoryViewSet
 from panasystem.employees.views import EmployeeViewSet
 
 router = DefaultRouter() if settings.DEBUG else SimpleRouter()
@@ -24,6 +24,7 @@ router.register("brands", BrandViewSet)
 router.register("customers", CustomerViewSet)
 router.register("sales", SaleViewSet)
 router.register("expenses", ExpenseViewSet)
+router.register("expense-category", ExpenseCategoryViewSet)
 router.register("employees", EmployeeViewSet)
 
 app_name = "api"

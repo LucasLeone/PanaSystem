@@ -1,1 +1,1 @@
-from .expenses import ExpenseViewSet
+from .expenses import ExpenseViewSet, ExpenseCategoryViewSet

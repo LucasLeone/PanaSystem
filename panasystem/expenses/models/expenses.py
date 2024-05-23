@@ -38,7 +38,9 @@ class Expense(PanaderiaModel):
     supplier = models.ForeignKey(
         'suppliers.Supplier',
         on_delete=models.CASCADE,
-        verbose_name='Proveedor'
+        verbose_name='Proveedor',
+        null=True,
+        blank=True
     )
 
     total = models.PositiveIntegerField()

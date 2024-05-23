@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # Serializers
-from panasystem.expenses.serializers import ExpenseSerializer
+from panasystem.expenses.serializers import ExpenseSerializer, ExpenseCategorySerializer
 
 # Models
 from panasystem.expenses.models import Expense, ExpenseCategory
@@ -39,4 +39,19 @@ class ExpenseViewSet(mixins.CreateModelMixin,
     filterset_fields = ('employee', 'category', 'supplier', 'date')
     search_fields = ('description',)
     # authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+
+class ExpenseCategoryViewSet(viewsets.ModelViewSet):
+    """ExpenseCategory viewset.
+    
+    Functions:
+        - Create an expense category.
+        - List expense categories.
+        - Retrieve an expense category.
+        - Update an expense category.
+        - Delete an expense category.
+    """
+    queryset = ExpenseCategory.objects.all()
+    serializer_class = ExpenseCategorySerializer
     permission_classes = [IsAuthenticated]
