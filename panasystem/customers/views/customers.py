@@ -34,7 +34,7 @@ class CustomerViewSet(mixins.CreateModelMixin,
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter)
-    filterset_fields = ('is_active', 'afip_condition', 'city')
-    search_fields = ('name', 'email', 'celular', 'address', 'id_number')
+    filterset_fields = ('is_active', 'city')
+    search_fields = ('name', 'email', 'celular', 'address')
     pagination_class = None
     # permission_classes = [IsAuthenticated]
