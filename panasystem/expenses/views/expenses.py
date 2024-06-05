@@ -5,7 +5,6 @@ from rest_framework import mixins, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # Serializers
 from panasystem.expenses.serializers import ExpenseSerializer, ExpenseCategorySerializer
@@ -38,11 +37,16 @@ class ExpenseViewSet(mixins.CreateModelMixin,
     filter_backends = (DjangoFilterBackend, SearchFilter)
     filterset_fields = ('employee', 'category', 'supplier', 'date')
     search_fields = ('description',)
-    # authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+    pagination_class = None
 
 
-class ExpenseCategoryViewSet(viewsets.ModelViewSet):
+class ExpenseCategoryViewSet(mixins.CreateModelMixin,
+                        mixins.UpdateModelMixin,
+                        mixins.RetrieveModelMixin,
+                        mixins.ListModelMixin,
+                        mixins.DestroyModelMixin,
+                        viewsets.GenericViewSet):
     """ExpenseCategory viewset.
     
     Functions:
@@ -52,6 +56,8 @@ class ExpenseCategoryViewSet(viewsets.ModelViewSet):
         - Update an expense category.
         - Delete an expense category.
     """
+    
     queryset = ExpenseCategory.objects.all()
     serializer_class = ExpenseCategorySerializer
+    pagination_class = None
     permission_classes = [IsAuthenticated]

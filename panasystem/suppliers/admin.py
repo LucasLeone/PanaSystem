@@ -4,8 +4,7 @@
 from django.contrib import admin
 
 # Model
-from panasystem.suppliers.models import Supplier, Order
+from panasystem.suppliers.models import Supplier
 
 
 admin.site.register(Supplier)
-admin.site.register(Order)

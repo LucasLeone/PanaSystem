@@ -21,7 +21,8 @@ class Sale(PanaderiaModel):
 
     date = models.DateTimeField(
         'Fecha',
-        default=now
+        default=now,
+        db_index=True
     )
     customer = models.ForeignKey(
         'customers.Customer',
@@ -29,25 +30,29 @@ class Sale(PanaderiaModel):
         null=True,
         blank=True,
         verbose_name='Cliente',
-        related_name='customer'
+        related_name='customer',
+        db_index=True
     )
     is_bakery = models.BooleanField(
         'Venta de panaderia',
         default=False,
-        help_text="Si es venta de panaderia, el precio a utilizar es el de mayorista."
+        help_text="Si es venta de panaderia, el precio a utilizar es el de mayorista.",
+        db_index=True
     )
     payment_method = models.CharField(
         'Método de pago',
         choices=PAYMENT_METHODS,
         default="Efectivo",
-        max_length=14
+        max_length=14,
+        db_index=True
     )
     total = models.DecimalField(
         'Total',
         max_digits=10,
         decimal_places=2,
         null=True, 
-        blank=True
+        blank=True,
+        db_index=True
     )
     total_charged = models.DecimalField(
         'Total cobrado',
@@ -59,7 +64,8 @@ class Sale(PanaderiaModel):
     )
     delivered = models.BooleanField(
         'Entregado',
-        default=True
+        default=True,
+        db_index=True
     )
 
     @property

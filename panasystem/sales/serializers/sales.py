@@ -15,7 +15,7 @@ class ProductSerializer(serializers.ModelSerializer):
         """Meta options."""
 
         model = Product
-        fields = ('id', 'name', 'public_price', 'wholesale_price')
+        fields = ('id', 'code', 'name', 'public_price', 'wholesale_price')
 
 
 class SaleDetailSerializer(serializers.ModelSerializer):

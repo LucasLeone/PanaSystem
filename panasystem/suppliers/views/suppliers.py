@@ -36,3 +36,4 @@ class SuppliersViewSet(mixins.CreateModelMixin,
     search_fields = ('name', 'celular')
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+    pagination_class = None

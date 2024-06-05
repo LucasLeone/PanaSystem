@@ -36,3 +36,4 @@ class EmployeeViewSet(mixins.CreateModelMixin,
     search_fields = ('name',)
     # authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+    pagination_class = None

@@ -5,7 +5,6 @@ from rest_framework import mixins, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # Serializers
 from panasystem.customers.serializers import CustomerSerializer
@@ -37,5 +36,5 @@ class CustomerViewSet(mixins.CreateModelMixin,
     filter_backends = (DjangoFilterBackend, SearchFilter)
     filterset_fields = ('is_active', 'afip_condition', 'city')
     search_fields = ('name', 'email', 'celular', 'address', 'id_number')
-    # authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    pagination_class = None
+    # permission_classes = [IsAuthenticated]
