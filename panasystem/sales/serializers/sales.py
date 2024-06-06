@@ -21,13 +21,11 @@ class ProductSerializer(serializers.ModelSerializer):
 class SaleDetailSerializer(serializers.ModelSerializer):
     """Sale detail serializer."""
 
-    product_info = ProductSerializer(source='product', read_only=True)
-
     class Meta:
         """Meta options."""
 
         model = SaleDetail
-        fields = ('product', 'product_info', 'quantity', 'unit_price', 'subtotal')
+        fields = ('product', 'quantity', 'unit_price', 'subtotal')
         read_only_fields = ('sale', 'subtotal')
 
 

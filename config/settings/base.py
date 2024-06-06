@@ -314,7 +314,7 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "PanaSystem API",
     "DESCRIPTION": "Documentation of API endpoints of PanaSystem",
     "VERSION": "1.0.0",
-    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
+    # "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
 }
 # Your stuff...
 # ------------------------------------------------------------------------------

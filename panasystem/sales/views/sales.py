@@ -58,7 +58,7 @@ class SaleViewSet(mixins.CreateModelMixin,
     filterset_class = SaleFilter
     search_fields = ('customer__name',)
     ordering_fields = ('date', 'total')
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     pagination_class = PageNumberPagination
 
     def create(self, request, *args, **kwargs):

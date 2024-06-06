@@ -42,7 +42,7 @@ class ProductViewSet(mixins.CreateModelMixin,
     pagination_class = None
 
 
-class CategoryViewSet(mixins.CreateModelMixin,
+class ProductCategoryViewSet(mixins.CreateModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.RetrieveModelMixin,
                     mixins.ListModelMixin,
@@ -67,7 +67,7 @@ class CategoryViewSet(mixins.CreateModelMixin,
     pagination_class = None
 
 
-class BrandViewSet(mixins.CreateModelMixin,
+class ProductBrandViewSet(mixins.CreateModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.RetrieveModelMixin,
                     mixins.ListModelMixin,

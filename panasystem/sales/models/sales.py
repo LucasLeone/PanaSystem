@@ -2,6 +2,7 @@
 
 # Django
 from django.db import models
+from django.core.exceptions import ValidationError
 
 # Utilities
 from panasystem.utils.models import PanaderiaModel
@@ -69,6 +70,13 @@ class Sale(PanaderiaModel):
         default=True
     )
 
+    def clean(self):
+        """Verify total and total_charged data."""
+        if self.total is not None and self.total <= 0:
+            raise ValidationError({'total': 'Total must be greater than 0.'})
+        if self.total_charged is not None and self.total_charged <= 0:
+            raise ValidationError({'total_charged': 'Total charged must be greater than 0.'})
+
     def calculate_total(self):
         """Calculate the total from sale details if details exist."""
         if self.sale_details.exists():
@@ -77,6 +85,7 @@ class Sale(PanaderiaModel):
 
     def save(self, *args, **kwargs):
         """Save total charged if it's null."""
+        self.full_clean()
         if self.total_charged is None:
             self.total_charged = self.total
         super().save(*args, **kwargs)
@@ -116,8 +125,18 @@ class SaleDetail(PanaderiaModel):
         decimal_places=2
     )
 
+    def clean(self):
+        """Verify quantity, unit_price and subtotal data."""
+        if self.quantity <= 0:
+            raise ValidationError({'quantity': 'Quantity must be greater than 0.'})
+        if self.unit_price <= 0:
+            raise ValidationError({'unit_price': 'Unit price must be greater than 0.'})
+        if self.subtotal <= 0:
+            raise ValidationError({'subtotal': 'Subtotal must be greater than 0.'})
+
     def save(self, *args, **kwargs):
         """Save unit price and subtotal."""
+        self.full_clean()
         self.subtotal = self.quantity * self.unit_price
         super().save(*args, **kwargs)
 

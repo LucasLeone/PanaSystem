@@ -36,5 +36,5 @@ class CustomerViewSet(mixins.CreateModelMixin,
     filter_backends = (DjangoFilterBackend, SearchFilter)
     filterset_fields = ('is_active', 'city')
     search_fields = ('name', 'email', 'celular', 'address')
-    # permission_classes = [IsAuthenticated] HABILITAR EN PRODUCCION
+    permission_classes = [IsAuthenticated]
     pagination_class = None
