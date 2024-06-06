@@ -1,7 +1,0 @@
-# PostgreSQL
-# ------------------------------------------------------------------------------
-POSTGRES_HOST=postgres
-POSTGRES_PORT=5432
-POSTGRES_DB=panasystem
-POSTGRES_USER=HCoMGmSsxYAoNaToiKJfIbgWREhEmvTO
-POSTGRES_PASSWORD=8em3YnQn545o9pxjejQwHDq7aHtUt8aywN0mf41EK3aKiku5A3LFvxppzC2JBnE9
