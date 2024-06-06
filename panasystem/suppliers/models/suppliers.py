@@ -14,6 +14,7 @@ class Supplier(PanaderiaModel):
         max_length=50,
         verbose_name="Nombre",
     )
+    
     celular = models.CharField(
         max_length=15,
         blank=True,

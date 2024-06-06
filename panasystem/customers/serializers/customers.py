@@ -16,6 +16,7 @@ class CustomerSerializer(serializers.ModelSerializer):
         """Meta options."""
         model = Customer
         fields = (
+            'pk',
             'name',
             'celular',
             'email',

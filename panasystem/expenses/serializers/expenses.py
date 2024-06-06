@@ -8,13 +8,9 @@ from panasystem.expenses.models import Expense, ExpenseCategory
 from panasystem.suppliers.models import Supplier
 from panasystem.employees.models import Employee
 
-# Serializers
-from panasystem.suppliers.serializers import SupplierSerializer
-from panasystem.employees.serializers import EmployeeSerializer
-
 
 class ExpenseCategorySerializer(serializers.ModelSerializer):
-    """Expense category serializer."""
+    """Expense category model serializer."""
 
     class Meta:
         model = ExpenseCategory
@@ -22,7 +18,7 @@ class ExpenseCategorySerializer(serializers.ModelSerializer):
 
 
 class ExpenseSerializer(serializers.ModelSerializer):
-    """Serializer for expense."""
+    """Expense model serializer."""
 
     category = serializers.PrimaryKeyRelatedField(queryset=ExpenseCategory.objects.all())
     supplier = serializers.PrimaryKeyRelatedField(queryset=Supplier.objects.all(), required=False)

@@ -34,17 +34,16 @@ class Expense(PanaderiaModel):
         'Fecha',
         default=now
     )
-    
-    supplier = models.ForeignKey(
-        'suppliers.Supplier',
-        on_delete=models.CASCADE,
-        verbose_name='Proveedor',
-        null=True,
-        blank=True
-    )
 
     total = models.PositiveIntegerField()
 
+    description = models.TextField(
+        'Descripción',
+        max_length=200,
+        null=True,
+        blank=True
+    )
+    
     category = models.ForeignKey(
         ExpenseCategory,
         on_delete=models.CASCADE,
@@ -56,10 +55,11 @@ class Expense(PanaderiaModel):
         on_delete=models.CASCADE,
         verbose_name='Empleado'
     )
-    
-    description = models.TextField(
-        'Descripción',
-        max_length=200,
+
+    supplier = models.ForeignKey(
+        'suppliers.Supplier',
+        on_delete=models.CASCADE,
+        verbose_name='Proveedor',
         null=True,
         blank=True
     )

@@ -2,9 +2,9 @@
 
 # Django REST Framework
 from rest_framework import mixins, viewsets
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
 
 # Serializers
 from panasystem.customers.serializers import CustomerSerializer
@@ -20,12 +20,12 @@ class CustomerViewSet(mixins.CreateModelMixin,
                     mixins.DestroyModelMixin,
                     viewsets.GenericViewSet):
     """Customer view set.
-    
+
     Functions:
         - Create a customer.
         - List customer:
-            * Filter by 'is_active, afip_condition, city'.
-            * Search by 'name, email, celular, address, id_number'
+            * Filter by 'is_active, city'.
+            * Search by 'name, email, celular, address'
         - Retrieve a customer.
         - Delete a customer.
         - Update a customer.
@@ -36,5 +36,5 @@ class CustomerViewSet(mixins.CreateModelMixin,
     filter_backends = (DjangoFilterBackend, SearchFilter)
     filterset_fields = ('is_active', 'city')
     search_fields = ('name', 'email', 'celular', 'address')
+    # permission_classes = [IsAuthenticated] HABILITAR EN PRODUCCION
     pagination_class = None
-    # permission_classes = [IsAuthenticated]

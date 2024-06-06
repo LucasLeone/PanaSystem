@@ -25,7 +25,8 @@ class ProductViewSet(mixins.CreateModelMixin,
         - Create a product.
         - List products:
             * Filter by 'category, brand, supplier'.
-            * Order by 'code, name'.
+            * Order by 'name'.
+            * Search by 'name, barcode'.
         - Retrieve a product.
         - Update a product.
         - Delete a product.
@@ -35,9 +36,9 @@ class ProductViewSet(mixins.CreateModelMixin,
     serializer_class = ProductSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
     filterset_fields = ('category', 'brand', 'supplier')
-    search_fields = ('code', 'name')
-    ordering_fields = ('code', 'name')
-    # permission_classes = [IsAuthenticated]
+    search_fields = ('barcode', 'name')
+    ordering_fields = ('name',)
+    permission_classes = [IsAuthenticated]
     pagination_class = None
 
 
@@ -87,5 +88,5 @@ class BrandViewSet(mixins.CreateModelMixin,
     serializer_class = BrandSerializer
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
+    permission_classes = [IsAuthenticated]
     pagination_class = None
-    # permission_classes = [IsAuthenticated]

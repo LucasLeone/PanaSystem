@@ -13,7 +13,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     list_display = (
         'pk',
-        'code',
+        'barcode',
         'name',
         'category',
         'supplier',

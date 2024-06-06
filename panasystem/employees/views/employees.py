@@ -4,7 +4,6 @@
 from rest_framework import mixins, viewsets
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # Serializers
 from panasystem.employees.serializers import EmployeeSerializer
@@ -34,6 +33,5 @@ class EmployeeViewSet(mixins.CreateModelMixin,
     serializer_class = EmployeeSerializer
     filter_backends = (SearchFilter,)
     search_fields = ('name',)
-    # authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     pagination_class = None

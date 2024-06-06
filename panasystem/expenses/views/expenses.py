@@ -11,7 +11,6 @@ from panasystem.expenses.serializers import ExpenseSerializer, ExpenseCategorySe
 
 # Models
 from panasystem.expenses.models import Expense, ExpenseCategory
-from panasystem.products.models import Product
 
 
 class ExpenseViewSet(mixins.CreateModelMixin,

@@ -5,7 +5,6 @@ from django.db import models
 
 # Utilities
 from panasystem.utils.models import PanaderiaModel
-from django.utils import timezone
 
 
 class Category(PanaderiaModel):
@@ -15,6 +14,7 @@ class Category(PanaderiaModel):
         'Nombre',
         max_length=50
     )
+
     description = models.TextField(
         'Descripción',
         max_length=100,
@@ -34,6 +34,7 @@ class Brand(PanaderiaModel):
         'Nombre',
         max_length=50
     )
+
     description = models.TextField(
         'Descripción',
         max_length=100,
@@ -49,28 +50,32 @@ class Brand(PanaderiaModel):
 class Product(PanaderiaModel):
     """Product model."""
 
-    code = models.CharField(
+    barcode = models.CharField(
         'Codigo de Barras',
         max_length=50,
         null=True,
         blank=True,
         unique=True
     )
+
     name = models.CharField(
         'Nombre',
         max_length=50
     )
+
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
-        related_name="category",
+        related_name="products",
         verbose_name = 'Categoria'
     )
+
     public_price = models.DecimalField(
         'Precio al público',
         max_digits=10,
         decimal_places=2
     )
+
     wholesale_price = models.DecimalField(
         'Precio al por mayor',
         max_digits=10,
@@ -78,6 +83,7 @@ class Product(PanaderiaModel):
         null=True,
         blank=True
     )
+
     brand = models.ForeignKey(
         Brand,
         null=True,
@@ -85,20 +91,23 @@ class Product(PanaderiaModel):
         verbose_name='Marca',
         on_delete=models.CASCADE
     )
+
     description = models.TextField(
         'Descripción',
         null=True,
         blank=True,
         max_length=100
     )
+
     supplier = models.ForeignKey(
         'suppliers.Supplier',
         verbose_name = 'Proveedor',
         on_delete=models.CASCADE,
-        related_name="supplier",
+        related_name="products",
         null=True,
         blank=True
     )
+
     current_stock = models.PositiveSmallIntegerField(
         'Stock actual',
         blank=True,
@@ -114,8 +123,8 @@ class Product(PanaderiaModel):
 
     def update_stock(self, quantity):
         """Update current stock after creating a sale."""
-        if self.current_stock != None:
-            if self.current_stock > 0:
+        if self.current_stock is not None:
+            if self.current_stock >= quantity:
                 self.current_stock -= quantity
                 self.save()
             else:
@@ -123,7 +132,7 @@ class Product(PanaderiaModel):
         
     def get_brand_name(self):
         """Get brand name."""
-        return self.brand.name
+        return self.brand.name if self.brand else None
 
     def __str__(self):
         """Return name."""
@@ -138,10 +147,12 @@ class PriceHistory(PanaderiaModel):
         on_delete=models.CASCADE,
         related_name="price_history"
     )
+
     public_price = models.DecimalField(
         max_digits=10,
         decimal_places=2
     )
+    
     wholesale_price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
