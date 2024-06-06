@@ -2,6 +2,7 @@
 
 # Django REST Framework
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
 
 # Models
 from panasystem.customers.models import Customer
@@ -29,5 +30,6 @@ class CustomerSerializer(serializers.ModelSerializer):
             'city': {'write_only': True}
         }
 
+    @extend_schema_field(serializers.CharField)
     def get_city_display(self, obj):
         return obj.get_city_display()
