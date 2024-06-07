@@ -1,5 +1,3 @@
-version: '3'
-
 volumes:
   panasystem_local_postgres_data: {}
   panasystem_local_postgres_data_backups: {}
