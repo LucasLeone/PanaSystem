@@ -14,20 +14,20 @@ Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings
 
 ## Basic Commands
 
-### How to start it
+### How to start
 
-- When you pull/download the project, you have to build the image with docker so:
+- When you pull/download the project, you need to build the image with Docker:
   ```
-      $ docker compose -f local.yml build
+  $ docker compose -f local.yml build
   ```
-- When docker finish to build the image you have to up the container with this command:
+- When Docker finishes building the image, you need to open the container with this command:
   ```
-      $ docker compose -f local.yml up
+  $ docker compose -f local.yml up
   ```
 
 ### Setting Up Your Users
 
-- To create a **normal user account**, just have to create a superuser account and go to Admin and create an user there.
+- To create a **normal user account**, just have to create a superuser account and go to Admin and create a user there.
 
 - To create a **superuser account**, use this command:
 ```
