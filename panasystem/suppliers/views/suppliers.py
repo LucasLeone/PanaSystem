@@ -13,20 +13,23 @@ from panasystem.suppliers.models import Supplier
 
 
 class SuppliersViewSet(mixins.CreateModelMixin,
-                mixins.UpdateModelMixin,
-                mixins.RetrieveModelMixin,
-                mixins.ListModelMixin,
-                mixins.DestroyModelMixin,
-                viewsets.GenericViewSet):
-    """Suppliers viewset.
-    
-    Functions:
-        - Create a supplier
-        - List suppliers:
-            * Search by 'name, celular'.
-        - Retrieve a supplier.
-        - Update a supplier.
-        - Delete a supplier.
+                       mixins.UpdateModelMixin,
+                       mixins.RetrieveModelMixin,
+                       mixins.ListModelMixin,
+                       mixins.DestroyModelMixin,
+                       viewsets.GenericViewSet):
+    """
+    ViewSet for managing suppliers.
+
+    Provides the following actions:
+    - Create a supplier
+    - List suppliers with optional search by 'name' and 'celular'
+    - Retrieve a specific supplier
+    - Update a supplier's details
+    - Delete a supplier
+
+    Permissions:
+    - Requires the user to be authenticated to perform any action.
     """
 
     queryset = Supplier.objects.all()

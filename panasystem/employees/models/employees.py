@@ -17,6 +17,5 @@ class Employee(PanaderiaModel):
     
     def __str__(self):
         """Return self.name."""
-
         return self.name
     

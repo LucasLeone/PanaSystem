@@ -1,5 +1,8 @@
 """Sales views."""
 
+# Django
+from django.db.models import F
+
 # Django REST Framework
 from rest_framework import mixins, viewsets, status
 from django_filters.rest_framework import DjangoFilterBackend
@@ -25,7 +28,10 @@ from django.db.models import Sum
 
 
 class DateFilter(filters.Filter):
+    """Custom filter to filter by exact date."""
+
     def filter(self, queryset, value):
+        """Filter queryset by exact date."""
         if value:
             start_date = datetime.strptime(value, '%Y-%m-%d').date()
             end_date = start_date + timedelta(days=1)
@@ -34,15 +40,22 @@ class DateFilter(filters.Filter):
 
 
 class SaleFilter(filters.FilterSet):
-    """Sale filter."""
+    """Sale filter for filtering sales based on different criteria."""
 
     date_range = filters.DateFromToRangeFilter(field_name='date')
     date = DateFilter(field_name='date')
+    total_charged_lt_total = filters.BooleanFilter(method='filter_total_charged_lt_total')
 
     class Meta:
-        """Meta options."""
+        """Meta options for SaleFilter."""
         model = Sale
-        fields = ['customer', 'is_bakery', 'payment_method', 'delivered', 'date', 'date_range', 'total_charged']
+        fields = ['customer', 'is_bakery', 'payment_method', 'delivered', 'date', 'date_range', 'total_charged', 'total_charged_lt_total']
+
+    def filter_total_charged_lt_total(self, queryset, name, value):
+        """Filter sales where total_charged is less than total."""
+        if value:
+            return queryset.filter(total_charged__lt=F('total'))
+        return queryset
 
 
 class SaleViewSet(mixins.CreateModelMixin,
@@ -51,6 +64,21 @@ class SaleViewSet(mixins.CreateModelMixin,
                   mixins.ListModelMixin,
                   mixins.DestroyModelMixin,
                   viewsets.GenericViewSet):
+    """
+    ViewSet for managing sales.
+
+    Provides the following actions:
+    - Create a sale or multiple sales in a single request
+    - List sales with filters by 'customer', 'is_bakery', 'payment_method', 'delivered', 'date', 'date_range', 'total_charged'
+    - Search sales by 'customer name'
+    - Order sales by 'date' or 'total'
+    - Retrieve a specific sale
+    - Update a sale's details
+    - Delete a sale
+
+    Permissions:
+    - Requires the user to be authenticated to perform any action.
+    """
 
     queryset = Sale.objects.all().select_related('customer').prefetch_related('sale_details__product')
     serializer_class = SaleSerializer
@@ -62,6 +90,7 @@ class SaleViewSet(mixins.CreateModelMixin,
     pagination_class = PageNumberPagination
 
     def create(self, request, *args, **kwargs):
+        """Create one or multiple sales in a single request."""
         sales_data = request.data
 
         if not isinstance(sales_data, list):
@@ -106,17 +135,24 @@ class SaleViewSet(mixins.CreateModelMixin,
 
     @action(detail=False, methods=['get'])
     def totals(self, request, *args, **kwargs):
-        """Get total sales and sum of totals.
-        
-        You have to filter by date_from, date_to, is_bakery (optional) and payment_method (optional).
+        """
+        Get total sales and sum of totals.
 
-        Example: api/v1/sales/totals/?date_from=2024-01-01&date_to=2024-12-31&is_bakery=False&payment_method=efv
+        Required query parameters:
+        - date_from: start date for the range (YYYY-MM-DD)
+        - date_to: end date for the range (YYYY-MM-DD)
+
+        Optional query parameters:
+        - is_bakery: filter by whether the sale is bakery-related (true/false)
+        - payment_method: filter by payment method
+
+        Example: api/v1/sales/totals/?date_from=2024-01-01&date_to=2024-12-31&is_bakery=false&payment_method=efv
 
         List of payment methods:
-            - efv ('Efectivo' -> Cash in english)
-            - trf ('Transferencia' -> Transfer in english)
-            - crd ('Tarjeta de Crédito/Débito -> Credit/Debit card in english)
-            - qr ('QR')
+        - efv ('Efectivo' -> Cash in English)
+        - trf ('Transferencia' -> Transfer in English)
+        - crd ('Tarjeta de Crédito/Débito' -> Credit/Debit card in English)
+        - qr ('QR')
         """
         date_from = request.query_params.get('date_from')
         date_to = request.query_params.get('date_to')
@@ -125,7 +161,7 @@ class SaleViewSet(mixins.CreateModelMixin,
 
         # Verify the existence of parameters.
         if not date_from or not date_to:
-            return Response({"error": "date_from and date_to parameters are required (is_bakery and payment_method is optional)."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "date_from and date_to parameters are required (is_bakery and payment_method are optional)."}, status=status.HTTP_400_BAD_REQUEST)
 
         # Convert dates to a valid format.
         try:
@@ -146,7 +182,7 @@ class SaleViewSet(mixins.CreateModelMixin,
                 is_bakery = False
             else:
                 return Response({"error": "Invalid value for is_bakery. Use 'true' or 'false'."}, status=status.HTTP_400_BAD_REQUEST)
-            queryset = queryset.filter(is_bakery=is_bakery)    
+            queryset = queryset.filter(is_bakery=is_bakery)
 
         if payment_method:
             queryset = queryset.filter(payment_method=payment_method)

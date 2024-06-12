@@ -74,8 +74,8 @@ class Sale(PanaderiaModel):
         """Verify total and total_charged data."""
         if self.total is not None and self.total <= 0:
             raise ValidationError({'total': 'Total must be greater than 0.'})
-        if self.total_charged is not None and self.total_charged <= 0:
-            raise ValidationError({'total_charged': 'Total charged must be greater than 0.'})
+        if self.total_charged is not None and self.total_charged < 0:
+            raise ValidationError({'total_charged': 'Total charged must be equal to o greater than 0.'})
 
     def calculate_total(self):
         """Calculate the total from sale details if details exist."""
@@ -131,8 +131,9 @@ class SaleDetail(PanaderiaModel):
             raise ValidationError({'quantity': 'Quantity must be greater than 0.'})
         if self.unit_price <= 0:
             raise ValidationError({'unit_price': 'Unit price must be greater than 0.'})
-        if self.subtotal <= 0:
-            raise ValidationError({'subtotal': 'Subtotal must be greater than 0.'})
+        if self.subtotal is not None:
+            if self.subtotal <= 0:
+                raise ValidationError({'subtotal': 'Subtotal must be greater than 0.'})
 
     def save(self, *args, **kwargs):
         """Save unit price and subtotal."""

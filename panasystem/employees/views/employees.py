@@ -1,4 +1,4 @@
-"""Employees views."""
+"""Employee views."""
 
 # Django REST Framework
 from rest_framework import mixins, viewsets
@@ -13,20 +13,23 @@ from panasystem.employees.models import Employee
 
 
 class EmployeeViewSet(mixins.CreateModelMixin,
-                mixins.UpdateModelMixin,
-                mixins.RetrieveModelMixin,
-                mixins.ListModelMixin,
-                mixins.DestroyModelMixin,
-                viewsets.GenericViewSet):
-    """Employee viewset.
-    
-    Functions:
-        - Create an employee.
-        - List employees:
-            * Search by 'name'.
-        - Retrieve an employee.
-        - Update an employee.
-        - Delete an employee.
+                      mixins.UpdateModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.ListModelMixin,
+                      mixins.DestroyModelMixin,
+                      viewsets.GenericViewSet):
+    """
+    ViewSet for managing employees.
+
+    Provides the following actions:
+    - Create an employee
+    - List employees with search capability by 'name'
+    - Retrieve a specific employee
+    - Update an employee's details
+    - Delete an employee
+
+    Permissions:
+    - Requires the user to be authenticated to perform any action.
     """
 
     queryset = Employee.objects.all()

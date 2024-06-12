@@ -28,6 +28,11 @@ class SaleDetailSerializer(serializers.ModelSerializer):
         fields = ('product', 'quantity', 'unit_price', 'subtotal')
         read_only_fields = ('sale', 'subtotal')
 
+    def validate(self, data):
+        """Ensure subtotal is calculated."""
+        data['subtotal'] = round(data['quantity'] * data['unit_price'], 2)
+        return data
+
 
 class SaleSerializer(serializers.ModelSerializer):
     """Sale serializer."""

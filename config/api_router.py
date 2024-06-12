@@ -1,6 +1,7 @@
+"""Api router."""
+
 # Django
 from django.conf import settings
-from django.urls import path, include
 
 # Django REST Framework
 from rest_framework.routers import DefaultRouter

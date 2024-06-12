@@ -36,9 +36,9 @@ class PriceHistorySerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     """Serializer for the Product model."""
 
-    category = CategorySerializer()
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
     supplier = serializers.PrimaryKeyRelatedField(queryset=Supplier.objects.all(), required=False)
-    brand = BrandSerializer(required=False)
+    brand = serializers.PrimaryKeyRelatedField(queryset=Brand.objects.all(), required=False)
     price_history = PriceHistorySerializer(many=True, read_only=True)
 
     class Meta:
@@ -59,37 +59,19 @@ class ProductSerializer(serializers.ModelSerializer):
             'modified'
         )
 
-    def validate_category(self, value):
-        """Ensure category exists."""
-        if 'name' not in value:
-            raise ValidationError("Category name is required")
-        category_name = value['name']
-        try:
-            category = Category.objects.get(name=category_name)
-        except Category.DoesNotExist:
-            raise ValidationError(f"Category with name {category_name} does not exist")
-        return category
-
-    def validate_brand(self, value):
-        """Ensure brand exists if provided."""
-        if value and 'name' in value:
-            brand_name = value['name']
-            try:
-                brand = Brand.objects.get(name=brand_name)
-            except Brand.DoesNotExist:
-                raise ValidationError(f"Brand with name {brand_name} does not exist")
-            return brand
-        return value
-
     def create(self, validated_data):
         """Create product."""
-        category_data = validated_data.pop('category')
-        brand_data = validated_data.pop('brand', None)
+        category = validated_data.pop('category')
+        brand = validated_data.pop('brand', None)
+        supplier = validated_data.pop('supplier', None)
 
-        category = self.validate_category(category_data)
-        brand = self.validate_brand(brand_data) if brand_data else None
-
-        product = Product.objects.create(category=category, brand=brand, **validated_data)
+        product = Product.objects.create(
+            category=category,
+            brand=brand,
+            supplier=supplier,
+            **validated_data
+        )
+        
         public_price = validated_data.get('public_price')
         wholesale_price = validated_data.get('wholesale_price', None)
 
@@ -102,28 +84,19 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """Update product."""
-        category_data = validated_data.pop('category', None)
-        brand_data = validated_data.pop('brand', None)
-
-        if category_data:
-            instance.category = self.validate_category(category_data)
-
-        if brand_data:
-            instance.brand = self.validate_brand(brand_data)
+        instance.category = validated_data.get('category', instance.category)
+        instance.brand = validated_data.get('brand', instance.brand)
+        instance.supplier = validated_data.get('supplier', instance.supplier)
 
         instance.barcode = validated_data.get('barcode', instance.barcode)
         instance.name = validated_data.get('name', instance.name)
         public_price = validated_data.get('public_price', instance.public_price)
         wholesale_price = validated_data.get('wholesale_price', instance.wholesale_price)
         instance.description = validated_data.get('description', instance.description)
-        instance.supplier = validated_data.get('supplier', instance.supplier)
         instance.current_stock = validated_data.get('current_stock', instance.current_stock)
 
         if public_price != instance.public_price or (wholesale_price is not None and wholesale_price != instance.wholesale_price):
             instance.update_price(public_price, wholesale_price)
-
-        instance.public_price = public_price
-        instance.wholesale_price = wholesale_price
 
         instance.save()
         return instance

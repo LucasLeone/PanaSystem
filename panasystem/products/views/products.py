@@ -14,24 +14,25 @@ from panasystem.products.models import Product, Category, Brand
 
 
 class ProductViewSet(mixins.CreateModelMixin,
-                    mixins.UpdateModelMixin,
-                    mixins.RetrieveModelMixin,
-                    mixins.ListModelMixin,
-                    mixins.DestroyModelMixin,
-                    viewsets.GenericViewSet):
-    """Product view set.
-    
-    Functions:
-        - Create a product.
-        - List products:
-            * Filter by 'category, brand, supplier'.
-            * Order by 'name'.
-            * Search by 'name, barcode'.
-        - Retrieve a product.
-        - Update a product.
-        - Delete a product.
+                     mixins.UpdateModelMixin,
+                     mixins.RetrieveModelMixin,
+                     mixins.ListModelMixin,
+                     mixins.DestroyModelMixin,
+                     viewsets.GenericViewSet):
     """
-    
+    ViewSet for managing products.
+
+    Provides the following actions:
+    - Create a product
+    - List products with filters by 'category', 'brand', 'supplier', ordering by 'name', and search capability by 'name' and 'barcode'
+    - Retrieve a specific product
+    - Update a product's details
+    - Delete a product
+
+    Permissions:
+    - Requires the user to be authenticated to perform any action.
+    """
+
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
@@ -43,20 +44,23 @@ class ProductViewSet(mixins.CreateModelMixin,
 
 
 class ProductCategoryViewSet(mixins.CreateModelMixin,
-                    mixins.UpdateModelMixin,
-                    mixins.RetrieveModelMixin,
-                    mixins.ListModelMixin,
-                    mixins.DestroyModelMixin,
-                    viewsets.GenericViewSet):
-    """Category view set.
-    
-    Functions:
-        - Create a category.
-        - List categories:
-            * Search by 'name'.
-        - Retrieve a category.
-        - Update a category.
-        - Delete a category.
+                             mixins.UpdateModelMixin,
+                             mixins.RetrieveModelMixin,
+                             mixins.ListModelMixin,
+                             mixins.DestroyModelMixin,
+                             viewsets.GenericViewSet):
+    """
+    ViewSet for managing product categories.
+
+    Provides the following actions:
+    - Create a category
+    - List categories with search capability by 'name'
+    - Retrieve a specific category
+    - Update a category's details
+    - Delete a category
+
+    Permissions:
+    - Requires the user to be authenticated to perform any action.
     """
 
     queryset = Category.objects.all()
@@ -68,20 +72,23 @@ class ProductCategoryViewSet(mixins.CreateModelMixin,
 
 
 class ProductBrandViewSet(mixins.CreateModelMixin,
-                    mixins.UpdateModelMixin,
-                    mixins.RetrieveModelMixin,
-                    mixins.ListModelMixin,
-                    mixins.DestroyModelMixin,
-                    viewsets.GenericViewSet):
-    """Brand view set.
-    
-    Functions:
-        - Create a brand.
-        - List brands:
-            * Search by 'name'.
-        - Retrieve a brand.
-        - Update a brand.
-        - Delete a brand.
+                          mixins.UpdateModelMixin,
+                          mixins.RetrieveModelMixin,
+                          mixins.ListModelMixin,
+                          mixins.DestroyModelMixin,
+                          viewsets.GenericViewSet):
+    """
+    ViewSet for managing product brands.
+
+    Provides the following actions:
+    - Create a brand
+    - List brands with search capability by 'name'
+    - Retrieve a specific brand
+    - Update a brand's details
+    - Delete a brand
+
+    Permissions:
+    - Requires the user to be authenticated to perform any action.
     """
 
     queryset = Brand.objects.all()

@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 
 # Django REST Framework
 from rest_framework import serializers
-from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.tokens import RefreshToken
 
 # Models
 from panasystem.users.models import User
@@ -42,7 +42,10 @@ class UserLoginSerializer(serializers.Serializer):
         self.context['user'] = user
         return data
 
-    def create(self, data):
-        """Generate or retrieve new token."""
-        token, created = Token.objects.get_or_create(user=self.context['user'])
-        return self.context['user'], token.key
+    def create(self, validated_data):
+        """Generate JWT token."""
+        user = self.context['user']
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+        refresh_token = str(refresh)
+        return user, access_token, refresh_token

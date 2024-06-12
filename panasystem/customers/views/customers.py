@@ -14,23 +14,27 @@ from panasystem.customers.models import Customer
 
 
 class CustomerViewSet(mixins.CreateModelMixin,
-                    mixins.UpdateModelMixin,
-                    mixins.RetrieveModelMixin,
-                    mixins.ListModelMixin,
-                    mixins.DestroyModelMixin,
-                    viewsets.GenericViewSet):
-    """Customer view set.
-
-    Functions:
-        - Create a customer.
-        - List customer:
-            * Filter by 'is_active, city'.
-            * Search by 'name, email, celular, address'
-        - Retrieve a customer.
-        - Delete a customer.
-        - Update a customer.
+                      mixins.UpdateModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.ListModelMixin,
+                      mixins.DestroyModelMixin,
+                      viewsets.GenericViewSet):
     """
-    
+    ViewSet for managing customers.
+
+    Provides the following actions:
+    - Create a customer
+    - List customers with filtering and search capabilities
+        * Filter by 'is_active' and 'city'
+        * Search by 'name', 'email', 'celular', and 'address'
+    - Retrieve a specific customer
+    - Update a customer's details
+    - Delete a customer
+
+    Permissions:
+    - Requires the user to be authenticated to perform any action.
+    """
+
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter)
