@@ -40,3 +40,10 @@ Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings
       $ docker compose -f local.yml run --rm django python manage.py makemigrations
       $ docker compose -f local.yml run --rm django python manage.py migrate
   ```
+
+### Tests
+
+- To run tests, just have to run the command:
+```
+ $ docker compose -f local.yml run --rm django pytest
+```
