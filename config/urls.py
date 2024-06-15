@@ -24,7 +24,7 @@ urlpatterns += [
     # API base url
     path("api/v1/", include("config.api_router")),
     # JWT token endpoints
-    path("api/v1/token/", TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path("api/v1/token/", TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path("api/v1/token/refresh/", TokenRefreshView.as_view(), name='token_refresh'),
     # API schema and docs
     path("api/v1/schema/", SpectacularAPIView.as_view(), name="api-schema"),
