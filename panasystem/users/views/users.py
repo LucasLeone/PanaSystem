@@ -127,3 +127,19 @@ class UsersViewSet(viewsets.GenericViewSet):
         users = User.objects.all()
         serializer = UserModelSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(
+        detail=False,
+        methods=["get"],
+        permission_classes=[IsAuthenticated],
+        url_path="me"
+    )
+    def user_info(self, request):
+        """
+        Get all user's data.
+
+        Only accessible by authenticated users.
+        """
+        user = request.user
+        serializer = UserModelSerializer(user)
+        return Response(serializer.data)
