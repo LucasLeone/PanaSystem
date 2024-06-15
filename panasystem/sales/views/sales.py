@@ -49,7 +49,7 @@ class SaleFilter(filters.FilterSet):
     class Meta:
         """Meta options for SaleFilter."""
         model = Sale
-        fields = ['customer', 'is_bakery', 'payment_method', 'delivered', 'date', 'date_range', 'total_charged', 'total_charged_lt_total']
+        fields = ['customer', 'is_bakery', 'payment_method', 'delivered', 'date', 'date_range', 'total_charged_lt_total']
 
     def filter_total_charged_lt_total(self, queryset, name, value):
         """Filter sales where total_charged is less than total."""
@@ -59,7 +59,6 @@ class SaleFilter(filters.FilterSet):
 
 
 class SaleViewSet(mixins.CreateModelMixin,
-                  mixins.UpdateModelMixin,
                   mixins.RetrieveModelMixin,
                   mixins.ListModelMixin,
                   mixins.DestroyModelMixin,
