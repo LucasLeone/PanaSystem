@@ -44,14 +44,14 @@ class SaleFilter(filters.FilterSet):
 
     date_range = filters.DateFromToRangeFilter(field_name='date')
     date = DateFilter(field_name='date')
-    total_charged_lt_total = filters.BooleanFilter(method='filter_total_charged_lt_total')
+    uncharged = filters.BooleanFilter(method='filter_uncharged')
 
     class Meta:
         """Meta options for SaleFilter."""
         model = Sale
-        fields = ['customer', 'is_bakery', 'payment_method', 'delivered', 'date', 'date_range', 'total_charged_lt_total']
+        fields = ['customer', 'is_bakery', 'payment_method', 'delivered', 'date', 'date_range', 'uncharged']
 
-    def filter_total_charged_lt_total(self, queryset, name, value):
+    def filter_uncharged(self, queryset, name, value):
         """Filter sales where total_charged is less than total."""
         if value:
             return queryset.filter(total_charged__lt=F('total'))
@@ -60,6 +60,7 @@ class SaleFilter(filters.FilterSet):
 
 class SaleViewSet(mixins.CreateModelMixin,
                   mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
                   mixins.ListModelMixin,
                   mixins.DestroyModelMixin,
                   viewsets.GenericViewSet):

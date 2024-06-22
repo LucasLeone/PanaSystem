@@ -81,10 +81,10 @@ class UsersViewSet(viewsets.GenericViewSet):
             token = RefreshToken(refresh_token)
             token.blacklist()
 
-            # Add access token to the blacklist
-            access_token = request.auth
-            if access_token:
-                BlacklistedAccessToken.objects.create(token=str(access_token))
+            # # Add access token to the blacklist
+            # access_token = request.auth
+            # if access_token:
+            #     BlacklistedAccessToken.objects.create(token=str(access_token))
 
             return Response(
                 {"success": True, "detail": "Logged out!"}, status=status.HTTP_200_OK
